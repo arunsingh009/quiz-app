@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz</title>
+  <link rel="stylesheet" href="quiz.css">
+</head>
+<body>
+  <h1>Welcome to the Quiz!</h1>
+  <p>Click the button to start the quiz.</p>
+  <button onclick="startQuiz()">Take the Quiz!</button>
+  
+  <div id="quiz" class="hidden">
+    <div id="question"></div>
+    <div id="answers"></div>
+    <button id="prev" onclick="prevQuestion()">Previous Question</button>
+    <button id="next" onclick="nextQuestion()">Next Question</button>
+  </div>
+
+  <div id="results" class="hidden">
+    <h2>Quiz Results</h2>
+    <p>You got <span id="score"></span> questions correct!</p>
+    <p id="feedback"></p>
+  </div>
+
+  <script src="quiz.js"></script>
+</body>
+</html>
