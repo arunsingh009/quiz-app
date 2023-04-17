@@ -1,146 +1,135 @@
-const questions = [
+ const questions = [
   {
-    question: "True or False: The sky is blue",
-    options: ["True", "False"],
-    answer: "True",
-    type: "radio",
+    question: 'True or False: The sky is blue',
+    answers: ['True', 'False'],
+    correctAnswer: ['True']
   },
   {
-    question: "Which of the following is in the ocean?",
-    options: ["fish", "shark", "horse", "cow", "starfish"],
-    answer: ["fish", "shark", "starfish"],
-    type: "checkbox",
+    question: 'Which of the following is in the ocean? (select all that apply)',
+    answers: ['Fish', 'Shark', 'Horse', 'Cow', 'Starfish'],
+    correctAnswer: ['Fish', 'Shark', 'Starfish']
   },
   {
-    question: "What is in the rain forest?",
-    options: ["Blue macaw", "cow", "fish", "pig"],
-    answer: "Blue macaw",
-    type: "radio",
-  },
+    question: 'What is in the rainforest?',
+    answers: ['Blue macaw', 'Cow', 'Fish', 'Pig'],
+    correctAnswer: ['Blue macaw']
+  }
 ];
 
-const quizContainer = document.getElementById("quiz-container");
-const startQuizBtn = document.getElementById("start-quiz");
-const questionEl = document.getElementById("question");
-const optionsEl = document.getElementById("options");
-const prevBtn = document.getElementById("prev-btn");
-const nextBtn = document.getElementById("next-btn");
-const resultsEl = document.getElementById("results");
-const scoreEl = document.getElementById("score");
-const messageEl = document.getElementById("message");
-
-let currentQuestionIndex = 0;
+let currentQuestion = 0;
 let score = 0;
 
-function startQuiz() {
-  startQuizBtn.style.display = "none";
-  quizContainer.style.display = "block";
-  showQuestion();
-}
+const quizDiv = document.querySelector('#quiz');
+const questionDiv = document.querySelector('#question');
+const answersDiv = document.querySelector('#answers');
+const previousButton = document.querySelector('#previous');
+const nextButton = document.querySelector('#next');
+const submitButton = document.querySelector('#submit');
+const resultDiv = document.querySelector('#result');
 
 function showQuestion() {
-  const currentQuestion = questions[currentQuestionIndex];
-  questionEl.innerText = currentQuestion.question;
-  optionsEl.innerHTML = "";
-  for (let i = 0; i < currentQuestion.options.length; i++) {
-    const option = currentQuestion.options[i];
-    const input = document.createElement("input");
-    input.type = currentQuestion.type;
-    input.name = "answer";
-    input.value = option;
-    optionsEl.appendChild(input);
-    optionsEl.appendChild(document.createTextNode(option));
+
+  const question = questions[currentQuestion];
+
+  questionDiv.textContent = question.question;
+  answersDiv.innerHTML = '';
+
+  for (let i = 0; i < question.answers.length; i++) {
+    const answer = question.answers[i];
+    const input = document.createElement('input');
+    input.type = question.correctAnswer instanceof Array ? 'checkbox' : 'radio';
+    input.name = `q${currentQuestion}`;
+    input.value = answer;
+    const label = document.createElement('label');
+    label.textContent = answer;
+    answersDiv.appendChild(input);
+    answersDiv.appendChild(label);
+    answersDiv.appendChild(document.createElement('br'));
   }
-  if (currentQuestionIndex === 0) {
-    prevBtn.style.display = "none";
-  } else {
-    prevBtn.style.display = "inline-block";
-  }
-  if (currentQuestionIndex === questions.length - 1) {
-    nextBtn.innerText = "Submit";
-  } else {
-    nextBtn.innerText = "Next";
-  }
+  document.getElementById("start").style.display="none";
 }
 
-function checkAnswer() {
-  let currentQuestion = questions[currentIndex];
+
+function submitAnswer() {
+  const selectedInputs = document.querySelectorAll(`input[name=q${currentQuestion}]:checked`);
+
+  if (selectedInputs.length === 0) {
+    alert('Please select an answer');
+    return;
+  }
+
   let selectedAnswers = [];
-
-  if (currentQuestion.type === 'truefalse') {
-    // For true/false questions, only one answer can be selected
-    selectedAnswers.push(document.querySelector('input[name="answer"]:checked').value);
-  } else if (currentQuestion.type === 'multiple') {
-    // For multiple-choice questions, get all selected answers
-    let answerElements = document.querySelectorAll('input[name="answer"]:checked');
-    for (let i = 0; i < answerElements.length; i++) {
-      selectedAnswers.push(answerElements[i].value);
-    }
-  } else if (currentQuestion.type === 'checkbox') {
-    // For checkbox questions, get all selected answers
-    let answerElements = document.querySelectorAll('input[name="answer"]:checked');
-    for (let i = 0; i < answerElements.length; i++) {
-      selectedAnswers.push(answerElements[i].value);
-    }
+  for (let i = 0; i < selectedInputs.length; i++) {
+    selectedAnswers.push(selectedInputs[i].value);
   }
 
-  // Compare selected answers with correct answers
-  let correctAnswers = currentQuestion.correctAnswers;
-  let isCorrect = selectedAnswers.every(answer => correctAnswers.includes(answer));
+  const question = questions[currentQuestion];
 
-  // Show feedback based on whether answer is correct
-  let feedback = document.getElementById('feedback');
-  if (isCorrect) {
-    feedback.innerHTML = 'Correct!';
-    feedback.style.color = 'green';
+  if (JSON.stringify(selectedAnswers) === JSON.stringify(question.correctAnswer)) {
     score++;
+  }
+
+  if (currentQuestion < questions.length-1) {
+    showQuestion();
   } else {
-    feedback.innerHTML = 'Incorrect!';
-    feedback.style.color = 'red';
+    showResult();
   }
-
-  // Disable answer inputs and show next question button
-  let answerInputs = document.querySelectorAll('input[name="answer"]');
-  for (let i = 0; i < answerInputs.length; i++) {
-    answerInputs[i].disabled = true;
-  }
-  document.getElementById('nextBtn').style.display = 'block';
+  console.log("Score is " + score);
 }
-function showResults() {
-  // Get all the answer containers
-  const answerContainers = quizContainer.querySelectorAll(".answers");
 
-  // Keep track of the user's score
-  let numCorrect = 0;
 
-  // Loop through each question and check if the user's answer is correct
-  myQuestions.forEach((currentQuestion, questionNumber) => {
-    const answerContainer = answerContainers[questionNumber];
-    const selector = `input[name=question${questionNumber}]:checked`;
-    const userAnswer = (answerContainer.querySelector(selector) || {}).value;
+function showResult() {
+  var scoreCard = document.getElementById("score");
+  var resultCard = document.getElementById("result");
+  
+  let totalScore = score;
 
-    // If the user's answer is correct, increment the score
-    if (userAnswer === currentQuestion.correctAnswer) {
-      numCorrect++;
-    }
-  });
+  const percentage = Math.round(totalScore / questions.length * 100);
+  let output = '';
 
-  // Calculate the percentage of correct answers
-  const percentage = ((numCorrect / myQuestions.length) * 100).toFixed(2);
-
-  // Display the appropriate message based on the user's score
-  let message = "";
   if (percentage >= 90) {
-    message = `Amazing Job! You really know your stuff! You got ${percentage}%`;
+    output = `Amazing job! You really know your stuff! You got ${percentage}%!`;
   } else if (percentage >= 80) {
-    message = `Great Job! You got ${percentage}%`;
+    output = `Great job! You got ${percentage}%!`;
   } else if (percentage >= 70) {
-    message = `Good job! You passed! You got ${percentage}%`;
+    output = `Good job! You passed! You got ${percentage}%!`;
   } else {
-    message = `Oops! Maybe you should go back and study some more. You got ${percentage}%`;
+    output = `Oops! Maybe you should go back and study some more. You got ${percentage}%`;
   }
-
-  // Display the message
-  resultsContainer.innerHTML = message;
+  scoreCard.innerHTML="Your Final Score is : " + score;
+  resultCard.innerHTML="Your Result based on your solution : " + output;
+  
 }
 
+previousButton.addEventListener('click', () => {
+  if (currentQuestion > 0) {
+    currentQuestion--;
+    showQuestion();
+  }
+});
+
+nextButton.addEventListener('click', () => {
+  if (currentQuestion < questions.length - 1) {
+    submitAnswer();
+    currentQuestion++;
+    showQuestion();
+  } else if (currentQuestion === questions.length -1) {
+    submitAnswer();
+    showResult();
+  }
+  if(currentQuestion==2){
+    document.getElementById("next").style.display="none";
+    document.getElementById("submit").style.display="block";
+    document.getElementById("previous").style.display="none";
+  }else{
+    document.getElementById("next").style.display="block";
+    document.getElementById("submit").style.display="none";
+  }
+  console.log(currentQuestion);
+});
+
+
+submitButton.addEventListener('click', () => {
+  submitAnswer();
+  showResult();
+});
