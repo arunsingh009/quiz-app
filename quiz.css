@@ -1,38 +1,46 @@
-body {
-  font-family: Arial, sans-serif;
-}
-
-.hidden {
-  display: none;
-}
-
 #quiz {
-  margin-top: 20px;
-}
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
 
-#question {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
+    #quiz h1 {
+      margin-bottom: 16px;
+    }
 
-#answers {
-  margin-bottom: 20px;
-}
+    #quiz p {
+      margin-top: 0;
+    }
 
-input[type="checkbox"], input[type="radio"] {
-  margin-right: 10px;
-}
+    #question {
+      margin-top: 16px;
+    }
 
-#prev, #next {
-  margin-top: 10px;
-  padding: 5px 10px;
-  font-size: 16px;
-}
+    #answers {
+      margin-top: 8px;
+    }
 
-#results {
-  margin-top: 20px;
-}
+    #answers label {
+      display: block;
+      margin-bottom: 4px;
+    }
 
-#score {
-  font-weight: bold;
-}
+    #score {
+      margin-top: 16px;
+    }
+
+    #buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 16px;
+      width: 100%;
+    }
+
+    #buttons button {
+      padding: 8px 16px;
+    }
+
+    #buttons button:last-child {
+      background-color: #008CBA;
+      color: white;
+    }
