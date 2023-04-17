@@ -1,0 +1,38 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
+.hidden {
+  display: none;
+}
+
+#quiz {
+  margin-top: 20px;
+}
+
+#question {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+#answers {
+  margin-bottom: 20px;
+}
+
+input[type="checkbox"], input[type="radio"] {
+  margin-right: 10px;
+}
+
+#prev, #next {
+  margin-top: 10px;
+  padding: 5px 10px;
+  font-size: 16px;
+}
+
+#results {
+  margin-top: 20px;
+}
+
+#score {
+  font-weight: bold;
+}
