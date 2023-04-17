@@ -6,21 +6,20 @@
   <link rel="stylesheet" href="quiz.css">
 </head>
 <body>
-  <h1>Welcome to the Quiz!</h1>
-  <p>Click the button to start the quiz.</p>
-  <button onclick="startQuiz()">Take the Quiz!</button>
-  
-  <div id="quiz" class="hidden">
+  <div id="quiz">
+    <h1>Quiz</h1>
+    <p>Test your knowledge</p>
+    <button id="start" onclick="showQuestion()">Start quiz</button>
     <div id="question"></div>
     <div id="answers"></div>
-    <button id="prev" onclick="prevQuestion()">Previous Question</button>
-    <button id="next" onclick="nextQuestion()">Next Question</button>
-  </div>
+    <div id="score" style="border:2px solid black; padding:5px;">Your score</div>
+    <div id="result" style="border:2px solid black; padding:5px;"> Result WIll appear here</div>
 
-  <div id="results" class="hidden">
-    <h2>Quiz Results</h2>
-    <p>You got <span id="score"></span> questions correct!</p>
-    <p id="feedback"></p>
+    <div id="buttons">
+      <button id="previous">Previous</button>
+      <button id="next">Next</button>
+      <button id="submit" style="display:none;" >Submit</button>
+    </div>
   </div>
 
   <script src="quiz.js"></script>
